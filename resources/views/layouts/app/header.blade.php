@@ -7,13 +7,15 @@
         <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden mr-2" icon="bars-2" inset="left" />
 
-            <x-app-logo href="{{ route('dashboard') }}" wire:navigate />
+            <x-app-logo href="{{ auth()->user()?->hasRole('Admin') ? route('admin.dashboard') : route('home') }}" wire:navigate />
 
+            @role('Admin')
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                <flux:navbar.item icon="presentation-chart-bar" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navbar.item>
             </flux:navbar>
+            @endrole
 
             <flux:spacer />
 
@@ -47,14 +49,24 @@
         <!-- Mobile Menu -->
         <flux:sidebar collapsible="mobile" sticky class="lg:hidden border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.header>
-                <x-app-logo :sidebar="true" href="{{ route('dashboard') }}" wire:navigate />
+                <x-app-logo :sidebar="true" href="{{ auth()->user()?->hasRole('Admin') ? route('admin.dashboard') : route('home') }}" wire:navigate />
                 <flux:sidebar.collapse class="in-data-flux-sidebar-on-desktop:not-in-data-flux-sidebar-collapsed-desktop:-mr-2" />
             </flux:sidebar.header>
 
             <flux:sidebar.nav>
                 <flux:sidebar.group :heading="__('Platform')">
-                    <flux:sidebar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
-                        {{ __('Dashboard')  }}
+                    <flux:sidebar.item icon="home" :href="route('home')" :current="request()->routeIs('home')" wire:navigate>
+                        {{ __('Home')  }}
+                    </flux:sidebar.item>
+                    
+                    @role('Admin')
+                        <flux:sidebar.item icon="presentation-chart-bar" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>
+                            {{ __('Dashboard')  }}
+                        </flux:sidebar.item>
+                    @endrole
+                    
+                    <flux:sidebar.item icon="ticket" :href="route('booking.history')" :current="request()->routeIs('booking.history')" wire:navigate>
+                        {{ __('My Bookings')  }}
                     </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
