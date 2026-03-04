@@ -1,0 +1,26 @@
+
+   INFO  Running migrations.  
+
+  2026_03_04_020145_create_bookings_table  11.05ms FAIL
+
+   Illuminate\Database\QueryException 
+
+  SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'bookings' already exists (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: seatify, SQL: create table `bookings` (`id` bigint unsigned not null auto_increment primary key, `user_id` bigint unsigned not null, `showtime_id` bigint unsigned not null, `booking_code` varchar(255) not null, `total_price` decimal(10, 2) not null, `status` enum('pending', 'paid', 'cancelled') not null default 'pending', `created_at` timestamp null, `updated_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci')
+
+  at vendor\laravel\framework\src\Illuminate\Database\Connection.php:838
+    834▕             $exceptionType = $this->isUniqueConstraintError($e)
+    835▕                 ? UniqueConstraintViolationException::class
+    836▕                 : QueryException::class;
+    837▕ 
+  ➜ 838▕             throw new $exceptionType(
+    839▕                 $this->getNameWithReadWriteType(),
+    840▕                 $query,
+    841▕                 $this->prepareBindings($bindings),
+    842▕                 $e,
+
+  1   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOException::("SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'bookings' already exists")
+
+  2   vendor\laravel\framework\src\Illuminate\Database\Connection.php:584
+      PDOStatement::execute()
+

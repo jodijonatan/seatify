@@ -15,19 +15,34 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="ticket" :href="route('booking.history')" :current="request()->routeIs('booking.history')" wire:navigate>
+                        {{ __('My Bookings') }}
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
             <flux:spacer />
 
             <flux:sidebar.nav>
-                <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                    {{ __('Repository') }}
-                </flux:sidebar.item>
-
-                <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
-                    {{ __('Documentation') }}
-                </flux:sidebar.item>
+                @role('Admin')
+                <flux:sidebar.group :heading="__('Admin Management')" class="grid">
+                    <flux:sidebar.item icon="building-office-2" :href="route('admin.cinemas.index')" :current="request()->routeIs('admin.cinemas.*')" wire:navigate>
+                        {{ __('Cinemas') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="presentation-chart-bar" :href="route('admin.studios.index')" :current="request()->routeIs('admin.studios.*')" wire:navigate>
+                        {{ __('Studios') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="film" :href="route('admin.movies.index')" :current="request()->routeIs('admin.movies.*')" wire:navigate>
+                        {{ __('Movies') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="calendar-days" :href="route('admin.showtimes.index')" :current="request()->routeIs('admin.showtimes.*')" wire:navigate>
+                        {{ __('Showtimes') }}
+                    </flux:sidebar.item>
+                    <flux:sidebar.item icon="ticket" :href="route('admin.bookings.index')" :current="request()->routeIs('admin.bookings.*')" wire:navigate>
+                        {{ __('Bookings') }}
+                    </flux:sidebar.item>
+                </flux:sidebar.group>
+                @endrole
             </flux:sidebar.nav>
 
             <x-desktop-user-menu class="hidden lg:block" :name="auth()->user()->name" />
