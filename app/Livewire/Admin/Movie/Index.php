@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Livewire\Admin\Movie;
 
 use App\Models\Movie;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
 class Index extends Component
@@ -15,16 +16,20 @@ class Index extends Component
 
     // Form fields
     public $movieId;
+
     public $title;
+
     public $description;
+
     public $duration;
+
     public $status = 'showing';
 
     public $isModalOpen = false;
 
     public function render()
     {
-        $movies = Movie::where('title', 'like', '%' . $this->search . '%')
+        $movies = Movie::where('title', 'like', '%'.$this->search.'%')
             ->paginate(10);
 
         return view('livewire.admin.movie.index', compact('movies'));

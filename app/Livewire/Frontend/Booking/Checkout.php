@@ -1,17 +1,19 @@
 <?php
+
 namespace App\Livewire\Frontend\Booking;
 
 use App\Models\Booking;
 use App\Models\Payment;
-use Livewire\Component;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.app')]
 class Checkout extends Component
 {
     public $booking;
+
     public $paymentMethod = 'bank_transfer';
 
     public function mount($bookingId)
@@ -56,6 +58,7 @@ class Checkout extends Component
             DB::commit();
 
             session()->flash('message', 'Payment successful! Here is your e-ticket.');
+
             return redirect()->route('booking.history', ['highlight' => $this->booking->id]);
 
         } catch (\Exception $e) {
@@ -69,15 +72,14 @@ class Checkout extends Component
         DB::beginTransaction();
         try {
             $this->booking->update(['status' => 'cancelled']);
-            
-            // Release seats
-            foreach ($this->booking->seats as $bSeat) {
-                $bSeat->update(['status' => 'available']);
-            }
+
+            // Delete booking seats to fully free them for re-booking
+            $this->booking->seats()->delete();
 
             DB::commit();
-            
+
             session()->flash('message', 'Booking cancelled successfully.');
+
             return redirect()->route('home');
 
         } catch (\Exception $e) {

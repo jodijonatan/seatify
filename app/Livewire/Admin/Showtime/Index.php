@@ -1,13 +1,14 @@
 <?php
+
 namespace App\Livewire\Admin\Showtime;
 
-use App\Models\Movie;
 use App\Models\Cinema;
-use App\Models\Studio;
+use App\Models\Movie;
 use App\Models\Showtime;
+use App\Models\Studio;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
 class Index extends Component
@@ -18,12 +19,19 @@ class Index extends Component
 
     // Form fields
     public $showtimeId;
+
     public $movie_id;
+
     public $cinema_id;
+
     public $studio_id;
+
     public $show_date;
+
     public $start_time;
+
     public $end_time;
+
     public $price;
 
     public $isModalOpen = false;
@@ -32,10 +40,10 @@ class Index extends Component
     {
         $showtimes = Showtime::with(['movie', 'cinema', 'studio'])
             ->whereHas('movie', function ($query) {
-                $query->where('title', 'like', '%' . $this->search . '%');
+                $query->where('title', 'like', '%'.$this->search.'%');
             })
             ->orWhereHas('cinema', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%'.$this->search.'%');
             })
             ->latest()
             ->paginate(10);

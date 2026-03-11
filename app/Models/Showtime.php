@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Showtime extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
-        'movie_id', 'cinema_id', 'studio_id', 'show_date', 'start_time', 'end_time', 'price'
+        'movie_id', 'cinema_id', 'studio_id', 'show_date', 'start_time', 'end_time', 'price',
     ];
 
     public function movie()

@@ -18,10 +18,8 @@ return new class extends Migration
             $table->foreignId('showtime_id')->constrained()->cascadeOnDelete();
             $table->enum('status', ['available', 'selected', 'booked'])->default('selected');
             $table->timestamps();
-            
-            // A seat in a showtime can't be booked multiple times. Wait, 'selected' might be temporarily locking.
-            // We should ensure a seat is unique per showtime to avoid double booking.
-            $table->unique(['showtime_id', 'seat_id']);
+
+            $table->index(['showtime_id', 'seat_id']);
         });
     }
 

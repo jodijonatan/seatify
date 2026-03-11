@@ -11,15 +11,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/booking/checkout/{bookingId}', App\Livewire\Frontend\Booking\Checkout::class)->name('booking.checkout');
     Route::get('/my-bookings', App\Livewire\Frontend\Booking\History::class)->name('booking.history');
     // Dashboard Redirector
-    Route::get('dashboard', function() {
+    Route::get('dashboard', function () {
         if (auth()->user()->hasRole('Admin')) {
             return redirect()->route('admin.dashboard');
         }
+
         return redirect()->route('home');
     })->name('dashboard');
 
     // Admin Routes
-    Route::middleware([\Spatie\Permission\Middleware\RoleMiddleware::class . ':Admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::middleware([\Spatie\Permission\Middleware\RoleMiddleware::class.':Admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', App\Livewire\Admin\Dashboard::class)->name('dashboard');
         Route::get('/cinemas', App\Livewire\Admin\Cinema\Index::class)->name('cinemas.index');
         Route::get('/studios', App\Livewire\Admin\Studio\Index::class)->name('studios.index');

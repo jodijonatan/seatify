@@ -1,38 +1,49 @@
 <?php
+
 namespace App\Livewire\Frontend\Booking;
 
-use App\Models\Seat;
 use App\Models\Booking;
-use App\Models\Showtime;
 use App\Models\BookingSeat;
-use Livewire\Component;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\DB;
+use App\Models\Seat;
+use App\Models\Showtime;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.app')]
 class SeatSelection extends Component
 {
     public $showtime;
+
     public $seats = [];
+
     public $bookedSeatIds = [];
+
     public $selectedSeatIds = [];
 
-    public function mount($showtimeId)
+    public function mount($showtimeId): void
     {
         $this->showtime = Showtime::with(['movie', 'cinema', 'studio'])->findOrFail($showtimeId);
-        
+
         // Load all seats for the studio
         $this->seats = Seat::where('studio_id', $this->showtime->studio_id)
             ->orderBy('row')
             ->orderBy('number')
             ->get();
-            
-        // Load already booked or pending seats for this showtime
+    }
+
+    protected function loadBookedSeatIds(): void
+    {
         $this->bookedSeatIds = BookingSeat::where('showtime_id', $this->showtime->id)
             ->whereIn('status', ['booked', 'selected'])
             ->pluck('seat_id')
             ->toArray();
+
+        // Drop any selected seats that have since been booked by someone else
+        $this->selectedSeatIds = array_values(
+            array_diff($this->selectedSeatIds, $this->bookedSeatIds)
+        );
     }
 
     public function toggleSeat($seatId)
@@ -49,6 +60,7 @@ class SeatSelection extends Component
             // Select (limit to max 6 seats per transaction to prevent abuse)
             if (count($this->selectedSeatIds) >= 6) {
                 session()->flash('error', 'You can only select up to 6 seats per booking.');
+
                 return;
             }
             $this->selectedSeatIds[] = $seatId;
@@ -57,12 +69,13 @@ class SeatSelection extends Component
 
     public function proceedToCheckout()
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login');
         }
 
         if (empty($this->selectedSeatIds)) {
             session()->flash('error', 'Please select at least one seat.');
+
             return;
         }
 
@@ -80,18 +93,19 @@ class SeatSelection extends Component
                 ->pluck('seat_id')
                 ->toArray();
             $this->selectedSeatIds = [];
+
             return;
         }
 
         DB::beginTransaction();
         try {
             $totalPrice = $this->showtime->price * count($this->selectedSeatIds);
-            
+
             // Create pending booking
             $booking = Booking::create([
                 'user_id' => Auth::id(),
                 'showtime_id' => $this->showtime->id,
-                'booking_code' => 'BKG-' . strtoupper(uniqid()),
+                'booking_code' => 'BKG-'.strtoupper(uniqid()),
                 'total_price' => $totalPrice,
                 'status' => 'pending',
             ]);
@@ -116,8 +130,11 @@ class SeatSelection extends Component
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\View\View
     {
+        // Refresh booked seat IDs on every render to reflect concurrent bookings
+        $this->loadBookedSeatIds();
+
         // Group seats by row for easier grid rendering
         $groupedSeats = $this->seats->groupBy('row');
         $totalPrice = $this->showtime->price * count($this->selectedSeatIds);

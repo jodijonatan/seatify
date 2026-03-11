@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Livewire\Admin\Booking;
 
 use App\Models\Booking;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
 class Index extends Component
@@ -16,10 +17,10 @@ class Index extends Component
     public function render()
     {
         $bookings = Booking::with(['user', 'showtime.movie'])
-            ->where('booking_code', 'like', '%' . $this->search . '%')
+            ->where('booking_code', 'like', '%'.$this->search.'%')
             ->orWhereHas('user', function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                      ->orWhere('email', 'like', '%' . $this->search . '%');
+                $query->where('name', 'like', '%'.$this->search.'%')
+                    ->orWhere('email', 'like', '%'.$this->search.'%');
             })
             ->latest()
             ->paginate(15);
@@ -31,7 +32,7 @@ class Index extends Component
     {
         $booking = Booking::findOrFail($id);
         $booking->update(['status' => 'paid']);
-        
+
         if ($booking->payment) {
             $booking->payment->update(['status' => 'success']);
         }
@@ -43,7 +44,7 @@ class Index extends Component
     {
         $booking = Booking::findOrFail($id);
         $booking->update(['status' => 'cancelled']);
-        
+
         // Free up the seats
         foreach ($booking->seats as $bookingSeat) {
             $bookingSeat->update(['status' => 'available']);

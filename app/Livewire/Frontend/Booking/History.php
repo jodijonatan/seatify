@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Livewire\Frontend\Booking;
 
 use App\Models\Booking;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
-use Illuminate\Support\Facades\Auth;
 
 #[Layout('layouts.app')]
 class History extends Component

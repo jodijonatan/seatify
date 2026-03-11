@@ -22,9 +22,11 @@
                         </flux:sidebar.item>
                     @endrole
 
-                    <flux:sidebar.item icon="ticket" :href="route('booking.history')" :current="request()->routeIs('booking.history')" wire:navigate>
-                        {{ __('My Bookings') }}
-                    </flux:sidebar.item>
+                    @auth
+                        <flux:sidebar.item icon="ticket" :href="route('booking.history')" :current="request()->routeIs('booking.history')" wire:navigate>
+                            {{ __('My Bookings') }}
+                        </flux:sidebar.item>
+                    @endauth
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 

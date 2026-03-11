@@ -1,12 +1,12 @@
 <?php
+
 namespace App\Livewire\Admin;
 
 use App\Models\Booking;
 use App\Models\Cinema;
 use App\Models\Movie;
-use App\Models\Showtime;
-use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Component;
 
 #[Layout('layouts.app')]
 class Dashboard extends Component

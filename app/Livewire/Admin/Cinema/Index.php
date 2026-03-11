@@ -1,10 +1,11 @@
 <?php
+
 namespace App\Livewire\Admin\Cinema;
 
 use App\Models\Cinema;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
 class Index extends Component
@@ -15,16 +16,19 @@ class Index extends Component
 
     // Form fields for Create/Edit
     public $cinemaId;
+
     public $name;
+
     public $address;
+
     public $city;
 
     public $isModalOpen = false;
 
     public function render()
     {
-        $cinemas = Cinema::where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('city', 'like', '%' . $this->search . '%')
+        $cinemas = Cinema::where('name', 'like', '%'.$this->search.'%')
+            ->orWhere('city', 'like', '%'.$this->search.'%')
             ->paginate(10);
 
         return view('livewire.admin.cinema.index', compact('cinemas'));

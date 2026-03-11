@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Livewire\Admin\Studio;
 
 use App\Models\Cinema;
 use App\Models\Studio;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\Layout;
 
 #[Layout('layouts.app')]
 class Index extends Component
@@ -16,8 +17,11 @@ class Index extends Component
 
     // Form fields
     public $studioId;
+
     public $cinema_id;
+
     public $name;
+
     public $capacity;
 
     public $isModalOpen = false;
@@ -25,9 +29,9 @@ class Index extends Component
     public function render()
     {
         $studios = Studio::with('cinema')
-            ->where('name', 'like', '%' . $this->search . '%')
+            ->where('name', 'like', '%'.$this->search.'%')
             ->paginate(10);
-            
+
         $cinemas = Cinema::all();
 
         return view('livewire.admin.studio.index', compact('studios', 'cinemas'));
@@ -95,10 +99,11 @@ class Index extends Component
     public function generateSeats($id)
     {
         $studio = Studio::findOrFail($id);
-        
+
         // Prevent duplicate generation if seats already exist
         if ($studio->seats()->count() > 0) {
             session()->flash('message', 'Seats already generated for this studio.');
+
             return;
         }
 
@@ -113,8 +118,10 @@ class Index extends Component
         for ($i = 0; $i < $rows; $i++) {
             $rowLetter = $alphabet[$i];
             for ($j = 1; $j <= $seatsPerRow; $j++) {
-                if ($seatCount >= $capacity) break 2;
-                
+                if ($seatCount >= $capacity) {
+                    break 2;
+                }
+
                 $seatData[] = [
                     'studio_id' => $studio->id,
                     'row' => $rowLetter,
@@ -128,6 +135,6 @@ class Index extends Component
 
         \App\Models\Seat::insert($seatData);
 
-        session()->flash('message', 'Seats generated successfully for ' . $studio->name);
+        session()->flash('message', 'Seats generated successfully for '.$studio->name);
     }
 }
