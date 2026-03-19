@@ -8,8 +8,8 @@
                     <flux:heading size="xl" class="mb-6">Review Your Booking</flux:heading>
                     
                     <div class="flex flex-col sm:flex-row gap-6 mb-8 border-b border-zinc-200 dark:border-zinc-700 pb-8">
-                        @if($booking->showtime->movie->poster_image)
-                            <img src="{{ Storage::url($booking->showtime->movie->poster_image) }}" alt="{{ $booking->showtime->movie->title }}" class="w-24 md:w-32 h-auto object-cover rounded-lg shadow-md hidden sm:block">
+                        @if($booking->showtime->movie->poster_url)
+                            <img src="{{ $booking->showtime->movie->poster_url }}" alt="{{ $booking->showtime->movie->title }}" class="w-24 md:w-32 h-auto object-cover rounded-lg shadow-md hidden sm:block">
                         @else
                             <div class="w-24 md:w-32 aspect-[2/3] bg-zinc-200 dark:bg-zinc-700 rounded-lg hidden sm:flex items-center justify-center text-zinc-500 shadow-md">
                                 <flux:icon.film class="size-8" />

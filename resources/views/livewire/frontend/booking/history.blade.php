@@ -14,8 +14,8 @@
             @forelse($bookings as $booking)
                 <flux:card class="{{ $booking->id == $highlight ? 'ring-2 ring-primary ring-offset-2 dark:ring-offset-zinc-900' : '' }}">
                     <div class="flex flex-col md:flex-row gap-6">
-                        @if($booking->showtime->movie->poster_image)
-                            <img src="{{ Storage::url($booking->showtime->movie->poster_image) }}" alt="{{ $booking->showtime->movie->title }}" class="w-24 md:w-32 h-auto object-cover rounded-lg shadow-sm hidden sm:block">
+                        @if($booking->showtime->movie->poster_url)
+                            <img src="{{ $booking->showtime->movie->poster_url }}" alt="{{ $booking->showtime->movie->title }}" class="w-24 md:w-32 h-auto object-cover rounded-lg shadow-sm hidden sm:block">
                         @else
                             <div class="w-24 md:w-32 aspect-[2/3] bg-zinc-200 dark:bg-zinc-700 rounded-lg hidden sm:flex items-center justify-center text-zinc-500 shadow-sm">
                                 <flux:icon.film class="size-8" />

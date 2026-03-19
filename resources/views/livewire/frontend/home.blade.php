@@ -6,8 +6,8 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 @foreach($movies as $movie)
                     <flux:card class="flex flex-col h-full hover:shadow-lg transition-shadow">
-                        @if($movie->poster_image)
-                            <img src="{{ Storage::url($movie->poster_image) }}" alt="{{ $movie->title }}" class="w-full h-64 object-cover rounded-t-lg mb-4">
+                        @if($movie->poster_url)
+                            <img src="{{ $movie->poster_url }}" alt="{{ $movie->title }}" class="w-full h-64 object-cover rounded-t-lg mb-4">
                         @else
                             <div class="w-full h-64 bg-zinc-200 dark:bg-zinc-700 rounded-t-lg mb-4 flex items-center justify-center text-zinc-500">
                                 <flux:icon.film class="size-12" />

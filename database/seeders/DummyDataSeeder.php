@@ -2,13 +2,13 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Cinema;
-use App\Models\Studio;
 use App\Models\Movie;
 use App\Models\Seat;
 use App\Models\Showtime;
+use App\Models\Studio;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class DummyDataSeeder extends Seeder
 {
@@ -17,37 +17,53 @@ class DummyDataSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Create Movies
+        // Disable foreign key constraints for truncation
+        \Schema::disableForeignKeyConstraints();
+        \App\Models\Showtime::truncate();
+        \App\Models\BookingSeat::truncate();
+        \App\Models\Booking::truncate();
+        \App\Models\Seat::truncate();
+        \App\Models\Studio::truncate();
+        \App\Models\Cinema::truncate();
+        \App\Models\Movie::truncate();
+        \Schema::enableForeignKeyConstraints();
+
+        // 1. Create Movies with high-quality posters
         $movies = [
             Movie::create([
                 'title' => 'Spider-Man: Beyond the Spider-Verse',
                 'description' => 'Miles Morales returns for the next chapter of the Spider-Verse saga, an epic adventure that will transport Brooklyn\'s full-time, friendly neighborhood Spider-Man across the Multiverse to join forces with Gwen Stacy and a new team of Spider-People.',
                 'duration' => 140,
                 'status' => 'showing',
+                'poster_image' => 'https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg',
             ]),
             Movie::create([
                 'title' => 'Dune: Part Two',
                 'description' => 'Paul Atreides unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family.',
                 'duration' => 166,
                 'status' => 'showing',
+                'poster_image' => 'https://image.tmdb.org/t/p/w500/1pdfLvkbY9ohJlCjQH2CZjjYVvJ.jpg',
             ]),
             Movie::create([
                 'title' => 'Oppenheimer',
                 'description' => 'The story of American scientist, J. Robert Oppenheimer, and his role in the development of the atomic bomb.',
                 'duration' => 180,
                 'status' => 'showing',
+                'poster_image' => 'https://image.tmdb.org/t/p/w500/8Gxv8gSFCU0XGDykEGv7zR1n2ua.jpg',
             ]),
             Movie::create([
                 'title' => 'Mission: Impossible - Dead Reckoning',
                 'description' => 'Ethan Hunt and his IMF team embark on their most dangerous mission yet.',
                 'duration' => 163,
                 'status' => 'showing',
+                'poster_image' => 'https://image.tmdb.org/t/p/w500/NNxYkU70HPurnNCSiCjYAmacwm.jpg',
             ]),
             Movie::create([
                 'title' => 'Deadpool & Wolverine',
                 'description' => 'Deadpool crosses paths with Wolverine in an action-packed, multiverse-spanning adventure.',
                 'duration' => 127,
-                'status' => 'upcoming',
+                'status' => 'showing',
+                'poster_image' => 'https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg',
             ]),
         ];
 
@@ -77,7 +93,7 @@ class DummyDataSeeder extends Seeder
             for ($i = 1; $i <= 3; $i++) {
                 $studio = Studio::create([
                     'cinema_id' => $cinema->id,
-                    'name' => 'Studio ' . $i,
+                    'name' => 'Studio '.$i,
                     'capacity' => 50, // 5 rows (A-E) x 10 seats
                 ]);
                 $studios[] = $studio;
@@ -98,22 +114,24 @@ class DummyDataSeeder extends Seeder
 
         // 4. Create Showtimes
         // Only for "showing" movies
-        $showingMovies = array_filter($movies, fn($m) => $m->status === 'showing');
-        
+        $showingMovies = array_filter($movies, fn ($m) => $m->status === 'showing');
+
         $times = ['10:00:00', '13:00:00', '16:00:00', '19:00:00'];
-        
+
         foreach ($showingMovies as $movie) {
             foreach ($studios as $index => $studio) {
                 // Not every movie plays in every studio. Pseudo-randomly assign:
-                if (rand(0, 10) > 7) continue; 
+                if (rand(0, 10) > 7) {
+                    continue;
+                }
 
-                // Generate showtimes for the next 7 days
-                for ($day = 0; $day < 7; $day++) {
+                // Generate showtimes for the next 365 days
+                for ($day = 0; $day < 365; $day++) {
                     $date = Carbon::now()->addDays($day)->format('Y-m-d');
-                    
+
                     // Pick 2 random times for this movie in this studio on this day
                     $selectedTimes = (array) array_rand(array_flip($times), 2);
-                    
+
                     foreach ($selectedTimes as $time) {
                         Showtime::create([
                             'movie_id' => $movie->id,
