@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
     <head>
@@ -118,4 +116,3 @@
         @fluxScripts
     </body>
 </html>
->>>>>>> parent of 40fa991 (feat: implement frontend movie, cinema, and studio listings with Livewire components and dedicated views.)

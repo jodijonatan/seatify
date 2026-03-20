@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 <?php
 
 use Illuminate\Support\Facades\Route;
@@ -34,4 +32,3 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 require __DIR__.'/settings.php';
->>>>>>> parent of 40fa991 (feat: implement frontend movie, cinema, and studio listings with Livewire components and dedicated views.)
