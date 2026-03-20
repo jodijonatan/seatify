@@ -19,14 +19,23 @@ class Show extends Component
     public function render()
     {
         // Group showtimes by cinema and date for easier display
-        $groupedShowtimes = $this->movie->showtimes
+        $availableShowtimes = $this->movie->showtimes
             ->where('show_date', '>=', now()->toDateString())
+            ->sortBy(fn ($showtime) => $showtime->show_date.' '.$showtime->start_time);
+
+        $nextShowtime = $availableShowtimes->first();
+
+        $groupedShowtimes = $availableShowtimes
             ->groupBy(function ($showtime) {
                 return $showtime->cinema->name;
             })->map(function ($cinemaShowtimes) {
                 return $cinemaShowtimes->groupBy('show_date');
             });
 
-        return view('livewire.frontend.movie.show', compact('groupedShowtimes'));
+        return view('livewire.frontend.movie.show', [
+            'groupedShowtimes' => $groupedShowtimes,
+            'nextShowtime' => $nextShowtime,
+            'availableShowtimesCount' => $availableShowtimes->count(),
+        ]);
     }
 }

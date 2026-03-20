@@ -70,6 +70,22 @@
             <div class="w-full md:w-1/3">
                 <flux:card class="sticky top-6">
                     <flux:heading size="lg" class="mb-4 border-b border-zinc-200 dark:border-zinc-700 pb-2">Booking Summary</flux:heading>
+
+                    <div class="mb-6">
+                        <div class="flex justify-between items-center mb-2">
+                            <flux:text class="text-xs text-zinc-500 font-medium uppercase tracking-wide">Selected Seats</flux:text>
+                            <flux:badge>{{ count($selectedSeatIds) }}/6</flux:badge>
+                        </div>
+                        <div class="h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                            @php
+                                $pct = 0;
+                                if (6 > 0) {
+                                    $pct = (count($selectedSeatIds) / 6) * 100;
+                                }
+                            @endphp
+                            <div class="h-2 bg-primary rounded-full" style="width: {{ min(100, $pct) }}%"></div>
+                        </div>
+                    </div>
                     
                     <div class="space-y-4 mb-6">
                         <div>

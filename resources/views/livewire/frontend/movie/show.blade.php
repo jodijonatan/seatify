@@ -19,6 +19,35 @@
                     <flux:icon.clock class="size-4" /> {{ $movie->duration }} mins
                 </flux:text>
             </div>
+
+            @if($nextShowtime)
+                <flux:card class="mb-8 rounded-2xl bg-primary/5 border-primary/20">
+                    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="min-w-0">
+                            <flux:heading size="md" class="text-primary mb-1">Next Available Showtime</flux:heading>
+                            <flux:text class="text-sm text-zinc-500">
+                                {{ $nextShowtime->cinema->name }} • {{ $nextShowtime->studio->name }} •
+                                {{ \Carbon\Carbon::parse($nextShowtime->show_date)->format('l, d F Y') }},
+                                {{ \Carbon\Carbon::parse($nextShowtime->start_time)->format('H:i') }}
+                            </flux:text>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <flux:text class="text-sm font-semibold whitespace-nowrap text-zinc-900 dark:text-zinc-100">
+                                Rp {{ number_format($nextShowtime->price, 0, ',', '.') }}
+                            </flux:text>
+                            <flux:button
+                                href="{{ route('booking.seat-selection', $nextShowtime->id) }}"
+                                variant="primary"
+                                wire:navigate
+                                icon-trailing="arrow-right"
+                            >
+                                Book Seats
+                            </flux:button>
+                        </div>
+                    </div>
+                </flux:card>
+            @endif
             
             <div class="mb-8">
                 <flux:heading size="lg" class="mb-2">Synopsis</flux:heading>
