@@ -16,11 +16,21 @@
                         {{ __('Home') }}
                     </flux:sidebar.item>
 
-                    @role('Admin')
-                        <flux:sidebar.item icon="presentation-chart-bar" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>
-                            {{ __('Dashboard') }}
-                        </flux:sidebar.item>
-                    @endrole
+                    <flux:sidebar.item icon="presentation-chart-bar" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
+                        {{ __('Dashboard') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="film" :href="route('movies.index')" :current="request()->routeIs('movies.index')" wire:navigate>
+                        {{ __('Movies') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="building-office-2" :href="route('cinemas.index')" :current="request()->routeIs('cinemas.index')" wire:navigate>
+                        {{ __('Cinemas') }}
+                    </flux:sidebar.item>
+
+                    <flux:sidebar.item icon="presentation-chart-bar" :href="route('studios.index')" :current="request()->routeIs('studios.index')" wire:navigate>
+                        {{ __('Studios') }}
+                    </flux:sidebar.item>
 
                     @auth
                         <flux:sidebar.item icon="ticket" :href="route('booking.history')" :current="request()->routeIs('booking.history')" wire:navigate>
