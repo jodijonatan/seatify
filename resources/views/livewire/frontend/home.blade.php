@@ -50,4 +50,30 @@
             </div>
         </div>
     @endif
+
+    @if($cinemas->count() > 0)
+        <div class="mt-16 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <flux:heading size="xl">{{ __('Our Cinemas') }}</flux:heading>
+                <flux:button href="#" variant="subtle" size="sm" wire:navigate>{{ __('View All') }}</flux:button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                @foreach($cinemas as $cinema)
+                    <flux:card class="p-6">
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-orange-100 text-orange-600 rounded-lg dark:bg-orange-900/30 dark:text-orange-500">
+                                <flux:icon.building-office-2 class="size-6" />
+                            </div>
+                            <div>
+                                <flux:heading size="lg" class="mb-1">{{ $cinema->name }}</flux:heading>
+                                <flux:text class="text-sm text-zinc-500 mb-2">{{ $cinema->city }}</flux:text>
+                                <flux:text class="text-xs text-zinc-400 line-clamp-2 leading-relaxed">{{ $cinema->address }}</flux:text>
+                            </div>
+                        </div>
+                    </flux:card>
+                @endforeach
+            </div>
+        </div>
+    @endif
 </div>
